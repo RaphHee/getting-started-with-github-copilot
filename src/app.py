@@ -132,4 +132,6 @@ def unregister_from_activity(activity_name: str, email: str):
         raise HTTPException(status_code=404, detail="Student not signed up for this activity")
 
     activity["participants"].remove(email)
-    return {"message": f"Removed {email} from {activity_name}"}
+    response = JSONResponse(content={"message": f"Removed {email} from {activity_name}"})
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    return response
