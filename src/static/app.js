@@ -20,30 +20,42 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
-        const participantsMarkup = details.participants.length
-          ? `
+const participantsMarkup = details.participants.length
+  ? `
             <ul class="participants-list">
               ${details.participants
-                .map(
-                  (participant) => `
+                .map((participant) => {
+                  const safeParticipant = String(participant)
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#39;");
+                  const safeName = String(name)
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#39;");
+                  return `
                     <li class="participant-item">
-                      <span class="participant-email">${participant}</span>
+                      <span class="participant-email">${safeParticipant}</span>
                       <button
                         type="button"
                         class="participant-remove"
-                        data-activity="${name}"
-                        data-email="${participant}"
-                        aria-label="Remove ${participant} from ${name}"
+                        data-activity="${safeName}"
+                        data-email="${safeParticipant}"
+                        aria-label="Remove ${safeParticipant} from ${safeName}"
                       >
                         x
                       </button>
                     </li>
-                  `
-                )
+                  `;
+                })
                 .join("")}
             </ul>
           `
-          : '<p class="participants-empty">No participants signed up yet.</p>';
+  : '<p class="participants-empty">No participants signed up yet.</p>';
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
