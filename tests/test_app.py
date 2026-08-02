@@ -31,7 +31,7 @@ def test_get_activities_returns_all():
     response = client.get("/activities")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 9
+assert len(data) == len(INITIAL_ACTIVITIES)
 
 
 def test_get_activities_contain_required_fields():
